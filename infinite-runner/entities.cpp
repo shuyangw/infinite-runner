@@ -32,6 +32,7 @@ void Player::init(void) {
 Player::Player(void) {
 	log_writeln("Player initialized");
 	Player::init();
+	Player::obj_type = 1;
 }
 
 bool Player::change_pos(int change) {
@@ -57,6 +58,7 @@ bool Player::change_pos(int change) {
 Enemy::Enemy(void) {
 	//TODO: Maybe add constructor for Enemy?
 	cout << "Enemy created" << endl;
+	Enemy::obj_type = 2;
 }
 
 // TODO: If decided to have Enemies change pos_x, change this
@@ -80,6 +82,7 @@ bool Enemy::change_pos(int change){
 	}
 }
 
+//Bullet constructor
 Bullet::Bullet(bool harmful, float velocity, float damage, float pos_z){
 	this->harmful = harmful;
 	this->velocity = velocity;

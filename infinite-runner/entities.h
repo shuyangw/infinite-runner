@@ -9,6 +9,8 @@ Notes:
 */
 class Entity {
 	public:
+		int obj_type;
+
 		int hp;
 		float pos_x;
 		float pos_y;
@@ -39,7 +41,7 @@ class Enemy : public Entity {
 		Enemy();
 		~Enemy() = default;
 
-		int type;
+		int enemy_type;
 		//Defined in "entities.cpp"
 		bool change_pos(int change);
 };
@@ -62,7 +64,7 @@ struct Packet {
 	std::vector<Entity> obj_entities;
 };
 
-//Struct for a 2-Tuple
+//Struct for a 2-Tuple that defines a coordinate point
 typedef struct Point Point;
 struct Point {
 	float x;

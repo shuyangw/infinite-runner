@@ -14,13 +14,18 @@
 #include "log.h"
 #include "keyboard.h"
 
+//Max resolution of teh game window
 const int SELF_RESOLUTION_W	=			1280;
 const int SELF_RESOLUTION_H =			720;
+
+//Some drawing constants
 const float SELF_LINE_WIDTH =			1.5;
 const int SELF_NUM_CIRCLE_POINTS =		15;
 const float SELF_CIRCLE_RADIUS =		10.0;
 
-//Next few points are ordered by {x,y}
+//Constants that facilitate the calculations of the lines that define the
+//borders of the playing field from the perspective of the player
+//Ordered by {x,y}
 const Point SELF_LEFT_F_INIT =			{ 0.0, 240.0 };
 const Point SELF_LEFT_T_INIT =			{ 440.0, 576.0 };
 const Point SELF_RIGHT_F_INIT =			{ 1280.0, 240.0 };
@@ -36,8 +41,6 @@ Game* game;
 //Current packet
 Packet packet;
 
-//Global conditions
-
 using namespace std;
 
 //Initializes Anti-Aliasing and line width
@@ -48,7 +51,8 @@ void init_line_settings(void) {
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
-//Draws line from point from p_1 point p_2 with p_2 having an alpha of 0
+//Draws line from point p_1 point to point p_2 that fades as it reaches its
+//destination
 void draw_line_fade(Point p_1, Point p_2, Color c) {
 	glBegin(GL_LINES);
 	glColor4f(c.r, c.g, c.b, 1.0);
@@ -58,6 +62,7 @@ void draw_line_fade(Point p_1, Point p_2, Color c) {
 	glEnd();
 }
 
+//Draws a line from point p_1 to point p_2
 void draw_line(Point p_1, Point p_2, Color c) {
 	glBegin(GL_LINES);
 	glColor3f(c.r, c.g, c.b);
@@ -66,6 +71,8 @@ void draw_line(Point p_1, Point p_2, Color c) {
 	glEnd();
 }
 
+//Draws a line from point p_1 to point p_2 with a certain alpha value ranging
+//from 0 to 1
 void draw_line_color_alpha(Point p_1, Point p_2, Color c, float alpha){
 	glBegin(GL_LINES);
 	glColor4f(c.r, c.g, c.b, alpha);
@@ -76,10 +83,16 @@ void draw_line_color_alpha(Point p_1, Point p_2, Color c, float alpha){
 
 //Draws circle centered at origin with color c
 void draw_circle(Point origin, Color c) {
-	glBegin(GL_LINE_LOOP);
+	glBegin(GL_LINE_LOOP); 
 	glColor3f(c.r, c.g, c.b);
+
+	//Draws a pseudo-circle by drawing lines between SELF_NUM_CIRCLE_POINTS
+	//number of vertices
 	for (int i = 0; i < SELF_NUM_CIRCLE_POINTS; i++) {
+		//Calculates the angle between 
 		float theta = 2.0f * M_PI * float(i) / float(SELF_NUM_CIRCLE_POINTS);
+
+		//Calculates the current vertex's coordinates
 		float x = SELF_CIRCLE_RADIUS * cosf(theta);
 		float y = SELF_CIRCLE_RADIUS * sinf(theta);
 		glVertex2f(x + origin.x, y + origin.y);
@@ -87,6 +100,8 @@ void draw_circle(Point origin, Color c) {
 	glEnd();
 }
 
+//Draws circle centered at origin with color c of a specified radius
+//Functionality essentially identical to the previous function
 void draw_circle_radius(Point origin, Color c, float radius) {
 	glBegin(GL_LINE_LOOP);
 	glColor3f(c.r, c.g, c.b);
@@ -99,8 +114,9 @@ void draw_circle_radius(Point origin, Color c, float radius) {
 	glEnd();
 }
 
+//Calculates some stuff regarding the calculation of the playing field
 //Corresponds to quadratic equation in the form x(t)=(1/2)at^2
-float left_endpt_function(float x){
+float endpt_function(float x){
 	const float ACCEL = 0.057395;
 	return ((0.5)*(ACCEL)*pow(x, 2.0));
 }
@@ -134,6 +150,8 @@ void draw_player() {
 }
 
 //Initializes the left and right borders for the board
+//Has a lot of math that I honestly forgot how to derive. I probably should have
+//commented this as I wrote it hmm
 void initialize_field(void) {
 	float x = game->player.pos_x;	
 	if (x == 100) {
@@ -160,7 +178,7 @@ void initialize_field(void) {
 		//Calculate from point for left
 		Point endpoint_l_f;
 		normalize = 200 - x;
-		projected_x = left_endpt_function(normalize);
+		projected_x = endpt_function(normalize);
 		if(projected_x <= 520){
 			endpoint_l_f.x = 0;
 			endpoint_l_f.y = 520 - projected_x;
@@ -184,7 +202,7 @@ void initialize_field(void) {
 		//Calculate from point for right
 		Point endpoint_r_f;
 		normalize = x;
-		projected_x = left_endpt_function(normalize);
+		projected_x = endpt_function(normalize);
 		if(projected_x <= 520){
 			endpoint_r_f.x = SELF_RESOLUTION_W;
 			endpoint_r_f.y = 520 - projected_x;
@@ -234,6 +252,7 @@ void render_loop() {
 	//Initializes the movement boundaries
 	initialize_field();
 
+	//Initializes the game objects
 	initialize_entities();
 }
 

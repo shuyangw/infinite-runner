@@ -37,7 +37,7 @@ int main(void){
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
-	// set up view
+	//Set up view
 	glViewport(0, 0, SELF_RESOLUTION_W, SELF_RESOLUTION_H);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
