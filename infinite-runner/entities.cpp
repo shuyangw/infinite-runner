@@ -89,3 +89,8 @@ Bullet::Bullet(bool harmful, float velocity, float damage, float pos_z){
 	this->damage = damage;
 	this->damage = pos_z;
 }
+
+Dummy::Dummy(bool aye){
+	Dummy::yes = aye;
+	Dummy::obj_type = -1;
+}

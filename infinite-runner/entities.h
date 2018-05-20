@@ -58,10 +58,18 @@ class Bullet : public Entity {
 		float damage;
 };
 
+class Dummy : public Entity{
+	public:
+		Dummy(bool aye);
+		~Dummy() = default;
+
+		bool yes;
+};
+
 typedef struct Packet Packet;
 struct Packet {
-	std::vector<Entity> enemy_entities;
-	std::vector<Entity> obj_entities;
+	std::vector<Enemy> enemy_entities;
+	std::vector<Bullet> bullet_entities;
 };
 
 //Struct for a 2-Tuple that defines a coordinate point

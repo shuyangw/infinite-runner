@@ -1,20 +1,23 @@
 #include <iostream>
 
 #include "game.h"
+#include "entities.h"
 
 Game::Game() {
-	Game::initialize();
+	Game::player.velocity = 3.5;
+	bullet_CD_lt = 0.0;
 }
 
 Packet Game::send_packet(void) {
 	//TODO
 	Packet p;
-	p.obj_entities = Game::obj_entities;
+	p.bullet_entities = Game::bullet_entities;
 	return p;
 }
 
-//Begin game logic section----------------------------------------------------------
-//Argument specifies direction of movement, negative for left, positive for right
+//Begin game logic section------------------------------------------------------
+//Argument specifies direction of movement, negative for left, positive for 
+//right
 bool Game::player_move(int direction) {
 	bool success;
 	if (direction < 0) {
@@ -35,11 +38,6 @@ void Game::player_shoot_bullet() {
 	);
 	b->pos_x = Game::player.pos_x;
 	b->pos_y = Game::player.pos_y + 10.0;
-	Game::obj_entities.push_back(*b);
-}
-
-void Game::initialize(void) {
-	Game::player.velocity = 3.5;
-	jump_CD_lt = 0.0;
-	bullet_CD_lt = 0.0;
+	b->obj_type = 2;
+	Game::bullet_entities.push_back(*b);
 }

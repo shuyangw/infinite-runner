@@ -7,6 +7,7 @@ using namespace std;
 class Game {
 	public:
 		Game();
+		~Game() = default;
 		
 		//Player object
 		Player player;
@@ -15,7 +16,7 @@ class Game {
 		vector<Entity> enemy_entities;
 
 		//Object entities
-		vector<Entity> obj_entities;
+		vector<Bullet> bullet_entities;
 
 		//-------------Methods--------------
 		//Sends info packet to screen for rendering
@@ -25,11 +26,7 @@ class Game {
 		bool player_move(int move_by);
 		void player_shoot_bullet(void);
 
-		//Initialization
-		void initialize(void);
-
 
 		//Other variables
-		float jump_CD_lt;
 		float bullet_CD_lt;
 };

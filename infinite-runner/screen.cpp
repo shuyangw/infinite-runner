@@ -101,7 +101,7 @@ void draw_circle(Point origin, Color c) {
 }
 
 //Draws circle centered at origin with color c of a specified radius
-//Functionality essentially identical to the previous function
+//Functionality essentially identical to that of the previous function
 void draw_circle_radius(Point origin, Color c, float radius) {
 	glBegin(GL_LINE_LOOP);
 	glColor3f(c.r, c.g, c.b);
@@ -121,6 +121,8 @@ float endpt_function(float x){
 	return ((0.5)*(ACCEL)*pow(x, 2.0));
 }
 
+//Draws the player ball on the playing field
+//If the player is jumping, we will 
 void draw_player() {
 	if (game->player.jumping) {
 		game->player.pos_z += game->player.jump_vel;
@@ -225,18 +227,19 @@ void initialize_entities(void) {
 	//Initializes player object on screen
 	draw_player();
 
-	vector<Entity>::iterator i;
-	vector<Entity> objects = packet.obj_entities;
+	vector<Bullet>::iterator i;
+	vector<Bullet> objects = packet.bullet_entities;
 	for (i = objects.begin(); i != objects.end(); ++i) {
-		Entity curr = *i;
-		draw_circle_radius(
-			{ curr.pos_x, curr.pos_y + curr.pos_z + SELF_CIRCLE_RADIUS}, 
-			SELF_WHITE,
-			1
-		);
-		/*if (curr.pos_z != 0) {
-		
-		}*/
+		Bullet curr = *i;
+		switch(curr.obj_type){
+			case 2: 
+				draw_circle_radius(
+					{ curr.pos_x, curr.pos_y + curr.pos_z + SELF_CIRCLE_RADIUS}, 
+					SELF_WHITE, 1
+				);
+			default:
+				break;
+		}
 	}
 }
 
@@ -271,7 +274,8 @@ void main_loop(GLFWwindow* window) {
 		//Rest of the FPS Counter
 		double FPS_counter_ct = glfwGetTime();
 		nbFrames++;
-		if (FPS_counter_ct - FPS_counter_lt >= 1.0) { // If last print was more than 1 sec ago
+		// If last print was more than 1 sec ago
+		if (FPS_counter_ct - FPS_counter_lt >= 1.0) { 
 			cout << to_string(int(nbFrames)) + " FPS"  << endl;
 			nbFrames = 0;
 			FPS_counter_lt += 1.0;
