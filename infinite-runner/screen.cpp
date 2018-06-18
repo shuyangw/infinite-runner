@@ -147,6 +147,7 @@ void draw_player() {
 		}
 	}
 	else {
+		game->player.jump_vel = 10.0;
 		draw_circle({ 640, 100 }, SELF_LCYAN);
 	}
 }
@@ -227,6 +228,7 @@ void initialize_entities(void) {
 	//Initializes player object on screen
 	draw_player();
 
+	//Draws bullets onto the screen
 	vector<Bullet>::iterator i;
 	vector<Bullet> objects = packet.bullet_entities;
 	for (i = objects.begin(); i != objects.end(); ++i) {
@@ -279,6 +281,8 @@ void main_loop(GLFWwindow* window) {
 			cout << to_string(int(nbFrames)) + " FPS"  << endl;
 			nbFrames = 0;
 			FPS_counter_lt += 1.0;
+
+			cout << game->player.velocity << endl;
 		}
 
 		//Keyboard inputs

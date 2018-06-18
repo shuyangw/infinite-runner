@@ -6,16 +6,15 @@
 void keyboard_input(GLFWwindow* window, Game* game) {
 	//Move left
 	if (glfwGetKey(window, GLFW_KEY_A)) {
-		game->player_move(-1);
+		game->player_move(-game->player.velocity);
 	}
 	//Move right
 	if (glfwGetKey(window, GLFW_KEY_D)) {
-		game->player_move(1);
+		game->player_move(game->player.velocity);
 	}
 	//Jump
 	if (glfwGetKey(window, GLFW_KEY_W)) {
 		if (!game->player.jumping) {
-			game->player.jump_vel = 10.0;
 			game->player.jumping = true;
 		}
 	}

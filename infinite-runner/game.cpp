@@ -4,7 +4,7 @@
 #include "entities.h"
 
 Game::Game() {
-	Game::player.velocity = 3.5;
+	//Initialize bullet cooldown variables
 	bullet_CD_lt = 0.0;
 }
 
@@ -13,6 +13,13 @@ Packet Game::send_packet(void) {
 	Packet p;
 	p.bullet_entities = Game::bullet_entities;
 	return p;
+}
+
+//Mainly iterates through to the next frame of the game, updating the screen and
+//game positions of every object that moves without user input, such as
+//projectile objects
+void Game::next_loop(void){
+
 }
 
 //Begin game logic section------------------------------------------------------
@@ -31,9 +38,9 @@ bool Game::player_move(int direction) {
 
 void Game::player_shoot_bullet() {
 	Bullet *b = new Bullet( //Initializes a bullet that is
-		false,		   //not harmful to the player
-		0.5,		   //has a velocity of 0.5 pixels per frame
-		1,			   //does 1 damage to the enemy
+		false,				//not harmful to the player
+		0.5,				//has a velocity of 0.5 pixels per frame
+		1,					//does 1 damage to the enemy
 		Game::player.pos_z
 	);
 	b->pos_x = Game::player.pos_x;

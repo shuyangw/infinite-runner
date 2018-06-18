@@ -25,8 +25,9 @@ void Player::init(void) {
 	this->pos_y = 0.0;
 	this->pos_z = 0.0;
 	this->armor = 0.0;
-	this->jump_vel = 0.0;
+	this->jump_vel = 10.0;
 	this->jumping = false;
+	this->velocity = 3.5;
 }
 
 Player::Player(void) {
